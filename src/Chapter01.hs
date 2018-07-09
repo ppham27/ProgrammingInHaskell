@@ -1,13 +1,16 @@
 module Chapter01 where
 
-product' [] = 1
-product' (x:xs) = x * product' xs
+product' xs = foldr (*) 1 xs
 
 qsort :: (Ord x) => [x] -> [x]
-qsort [] = []
-qsort (x:xs) = qsort smaller ++ [x] ++ qsort larger
-  where
-    smaller = [a | a <- xs, a <= x]
-    larger = [b | b <- xs, b > x]
+qsort = qsortBy (<=)
 
--- qsortReverse :: (Ord x) => [x] -> x[x]
+qsortReverse :: (Ord x) => [x] -> [x]
+qsortReverse = qsortBy (>)
+
+qsortBy :: (Ord x) => (x -> x -> Bool) -> [x] -> [x]
+qsortBy f [] = []
+qsortBy f (x:xs) = qsortBy f smaller ++ [x] ++ qsortBy f larger
+  where
+    smaller = [a | a <- xs,  a `f` x]
+    larger = [b | b <- xs, not (b `f` x)]

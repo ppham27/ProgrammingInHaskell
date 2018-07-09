@@ -14,6 +14,7 @@ spec = describe "Chapter 1" $ do
   sumSpec
   productSpec
   qsortSpec
+  qsortReverseSpec
 
 sumSpec :: Spec
 sumSpec = describe "sum" $
@@ -35,3 +36,11 @@ qsortSpec = describe "qsort" $ do
       
   it "should sort lists" $
     property $ \xs -> qsort (xs :: [Int]) == sort xs
+
+-- qsortReverseSpec :: Spec
+qsortReverseSpec = describe "qsortReverse" $ do
+  it "should sort a list with repeats in reverse" $
+    qsortReverse [2,2,3,1,1] `shouldBe` ([3,2,2,1,1] :: [Int])
+
+  it "should sort lists in descening order" $
+    property $ \xs -> qsortReverse (xs :: [Int]) == reverse (sort xs)
