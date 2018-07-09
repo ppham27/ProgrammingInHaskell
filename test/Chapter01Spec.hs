@@ -11,10 +11,16 @@ main = hspec spec
 
 spec :: Spec
 spec = describe "Chapter 1" $ do
+  doubleSpec
   sumSpec
   productSpec
   qsortSpec
   qsortReverseSpec
+
+doubleSpec :: Spec
+doubleSpec = describe "double" $
+  it "should double numbers" $
+    double (double 2) `shouldBe` 8
 
 sumSpec :: Spec
 sumSpec = describe "sum" $

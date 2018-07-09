@@ -1,5 +1,7 @@
 module Chapter01 where
 
+double x = x + x
+
 product' xs = foldr (*) 1 xs
 
 qsort :: (Ord x) => [x] -> [x]
