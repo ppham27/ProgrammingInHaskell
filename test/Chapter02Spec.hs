@@ -1,5 +1,7 @@
 module Chapter02Spec where
 
+import Control.Exception (evaluate)
+import qualified Data.List.NonEmpty as NonEmpty
 import Test.Hspec
 import Test.QuickCheck
 
@@ -12,6 +14,7 @@ spec = describe "Chapter 2" $ do
   expressionsSpec
   divideSpec
   lastSpec
+  initSpec
 
 expressionsSpec :: Spec
 expressionsSpec = describe "expressions" $ do
@@ -39,3 +42,19 @@ lastSpec = describe "last" $ do
 
   it "should throw an error on an empty list" $
     last' [] `shouldThrow` errorCall "empty list"
+
+  it "should always work with non-empty lists" $
+    property $ \(Test.QuickCheck.NonEmpty xs) ->
+    let ys = NonEmpty.nonEmpty (xs :: [Int]) in
+      case ys of
+        Just zs -> NonEmpty.last zs == last' xs
+        Nothing -> False
+
+initSpec :: Spec
+initSpec = describe "init" $ do
+  it "should be drop the last element" $
+    let initProperty xs = init' (xs :: [Int]) == reverse (tail (reverse xs)) in
+      forAll (listOf1 arbitrary) initProperty
+
+  it "should throw an error on an empty list" $
+    evaluate (init' []) `shouldThrow` errorCall "empty list"
